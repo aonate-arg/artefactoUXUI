@@ -291,7 +291,7 @@
   }
 
   function pintarPaso1() {
-    var st = t(), meta = metaTablero(), lista = principiosDe(estado.activo);
+    var st = t(), lista = principiosDe(estado.activo);
     var n = st.sel.length;
 
     /* Ley de Hick: "todo campo con un valor previsible viene con un valor
@@ -307,10 +307,16 @@
         : items;
     }).join('');
 
+    /* Solo acá el label omite "Tablero X · Título": el selector de
+       tablero, con la tarjeta activa resaltada, sigue a la vista justo
+       arriba. Repetirlo sería el mismo dato tres veces seguidas
+       (tarjeta resaltada, nav de pasos, este label). En paso 2 y 3 el
+       selector ya salió de la pantalla al hacer scroll, así que ahí sí
+       hace falta — heurística 01, visibilidad del estado del sistema. */
     return '' +
     '<div class="section">' +
       '<div class="section__head">' +
-        '<p class="label">Paso 1 de 4 · Tablero ' + meta.orden + ' · ' + esc(meta.titulo) + '</p>' +
+        '<p class="label">Paso 1 de 4</p>' +
         '<h2>Elegí qué principios vas a evaluar</h2>' +
         '<p class="lead">Podés tomar todos o quedarte con un subconjunto. ' +
           'Después vas a cargar tus propios hallazgos para cada uno de los que elijas.</p>' +

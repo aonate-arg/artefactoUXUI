@@ -48,16 +48,11 @@
     </div>
 
     <div class="stack gap-4">
-      <div class="callout callout--info">
-        <p class="callout__title">Los tableros no se muestran de entrada</p>
-        <p>
-          Primero elegís qué principios vas a analizar y cargás tus propios hallazgos.
-          Cuando cerrás tu evaluación se despliega el tablero completo y podés
-          contrastarlo con lo que viste vos. Es para que formes tu criterio sin
-          anclarte en el nuestro.
-        </p>
-      </div>
-
+      <!-- La decisión primaria de la pantalla va primero, lo más cerca
+           posible del título — ley de Fitts: menos distancia hasta el
+           control que realmente importa. El callout explica el mecanismo
+           del flujo completo, no "qué pasa si elegís este tablero", así
+           que sigue siendo igual de válido leído después de elegir. -->
       <div class="board-picker" role="tablist" aria-label="Elegí el tablero">
         <button type="button" class="board-pick" role="tab" id="tab-leyes"
                 aria-selected="true" aria-controls="panel-tablero" data-tablero="leyes">
@@ -77,6 +72,16 @@
           <span class="board-pick__title">Heurísticas de Nielsen</span>
           <span class="board-pick__desc">Las diez heurísticas de usabilidad</span>
         </button>
+      </div>
+
+      <div class="callout callout--info">
+        <p class="callout__title">Los tableros no se muestran de entrada</p>
+        <p>
+          Primero elegís qué principios vas a analizar y cargás tus propios hallazgos.
+          Cuando cerrás tu evaluación se despliega el tablero completo y podés
+          contrastarlo con lo que viste vos. Es para que formes tu criterio sin
+          anclarte en el nuestro.
+        </p>
       </div>
     </div>
   </section>
