@@ -844,6 +844,12 @@
 
     return '' +
     '<div class="section">' +
+      /* Tres grupos, no dos: "Empezar de nuevo" queda como su propio
+         grupo en el extremo del actionbar (que ya reparte sus hijos con
+         justify-content:space-between), lejos de Exportar. Ley de Fitts,
+         regla operativa: las acciones destructivas se separan
+         físicamente de las frecuentes — acá viven en el mismo actionbar
+         que "Exportar" y antes estaban pegadas una a la otra. */
       '<div class="actionbar">' +
         '<div class="row" role="group" aria-label="Vista del tablero">' +
           '<button type="button" class="tab" data-vista="tablero"' +
@@ -851,10 +857,8 @@
           '<button type="button" class="tab" data-vista="comparacion"' +
             ' aria-selected="' + soloComparacion + '">Solo comparación</button>' +
         '</div>' +
-        '<div class="row">' +
-          '<button type="button" class="btn btn--ghost" id="exportar">Exportar</button>' +
-          '<button type="button" class="btn btn--danger" id="reiniciar">Empezar de nuevo</button>' +
-        '</div>' +
+        '<button type="button" class="btn btn--ghost" id="exportar">Exportar</button>' +
+        '<button type="button" class="btn btn--danger" id="reiniciar">Empezar de nuevo</button>' +
       '</div>' +
       (soloComparacion ? pintarComparacion(datos) : pintarTableroInforme(datos)) +
     '</div>';
