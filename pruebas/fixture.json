@@ -1,0 +1,45 @@
+{
+  "producto": {
+    "nombre": "PRUEBA",
+    "url": "ejemplo.test",
+    "fecha": "2026-08-30",
+    "alcance": "Datos de prueba para verificar el render. No se publica."
+  },
+  "metodo": "Fixture de prueba.",
+  "tableros": {
+    "leyes": {
+      "hallazgos": [
+        {
+          "id": "L2-01", "principio": "L2", "titulo": "Título de prueba uno",
+          "donde": "Pantalla de prueba", "evidencia": "01-home.png",
+          "alt": "Texto alternativo de prueba", "pie": "Pie de prueba",
+          "que": "Descripción de prueba del problema y su efecto.",
+          "gravedad": 5, "facilidad": 4,
+          "recomendacion": "Recomendación de prueba con un valor concreto."
+        },
+        {
+          "id": "L4-01", "principio": "L4", "titulo": "Título de prueba dos",
+          "donde": "Otra pantalla", "evidencia": null,
+          "que": "Otra descripción de prueba.",
+          "gravedad": 3, "facilidad": 2,
+          "recomendacion": "Otra recomendación de prueba."
+        }
+      ],
+      "cumple": ["L3"],
+      "cumpleNota": { "L3": "Nota de prueba sobre por qué cumple." }
+    },
+    "heuristicas": {
+      "hallazgos": [
+        {
+          "id": "H01-01", "principio": "H01", "titulo": "Título de prueba tres",
+          "donde": "Pantalla de prueba", "evidencia": null,
+          "que": "Descripción de prueba.",
+          "gravedad": 4, "facilidad": 5,
+          "recomendacion": "Recomendación de prueba."
+        }
+      ],
+      "cumple": ["H02"],
+      "cumpleNota": { "H02": "Nota de prueba." }
+    }
+  }
+}

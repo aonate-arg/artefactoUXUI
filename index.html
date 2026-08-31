@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tableros de evaluación UX · Wendy's Argentina</title>
+<meta name="description" content="Evaluación heurística de wendys.com.ar: dos tableros de hallazgos con evidencia, severidad y recomendación, detrás de un flujo de evaluación a ciegas.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23101216'/%3E%3Cpath d='M8 10h4l2 8 2-8h4l2 8 2-8h4' stroke='%2335E0C8' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+
+<a class="sr-only" href="#main">Saltar al contenido</a>
+
+<header class="topbar">
+  <div class="topbar__brand">
+    <span class="mark" aria-hidden="true">UX</span>
+    <span class="topbar__name">Tableros de evaluación UX</span>
+    <span class="topbar__ctx" id="topbar-ctx">Diseño UX/UI</span>
+  </div>
+  <button type="button" class="btn btn--ghost" id="theme-toggle" aria-pressed="false">
+    Tema claro
+  </button>
+</header>
+
+<main id="main" class="content">
+
+  <!-- ── Encabezado del trabajo ────────────────────────────── -->
+  <section class="section" aria-labelledby="titulo">
+    <div class="section__head">
+      <p class="label">Diseño UX/UI · Evaluación heurística</p>
+      <h1 id="titulo">Wendy's Argentina</h1>
+      <p class="lead">
+        Evaluación de <span class="num">wendys.com.ar</span> contra las cuatro leyes de UX
+        y las diez heurísticas de Nielsen. Cada hallazgo se documenta con su evidencia,
+        su gravedad, su facilidad de arreglo y una recomendación concreta.
+      </p>
+    </div>
+
+    <div class="callout callout--info">
+      <p class="callout__title">Los tableros no se muestran de entrada</p>
+      <p>
+        Primero elegís qué principios vas a analizar y cargás tus propios hallazgos.
+        Cuando cerrás tu evaluación se despliega el tablero completo y podés
+        contrastarlo con lo que viste vos. Es para que formes tu criterio sin
+        anclarte en el nuestro.
+      </p>
+    </div>
+
+    <div class="tabs" role="tablist" aria-label="Elegí el tablero">
+      <button type="button" class="tab" role="tab" id="tab-leyes"
+              aria-selected="true" aria-controls="panel-tablero" data-tablero="leyes">
+        Tablero A · Leyes de UX
+        <span class="label" id="estado-leyes"></span>
+      </button>
+      <button type="button" class="tab" role="tab" id="tab-heuristicas"
+              aria-selected="false" aria-controls="panel-tablero" data-tablero="heuristicas">
+        Tablero B · Heurísticas de Nielsen
+        <span class="label" id="estado-heuristicas"></span>
+      </button>
+    </div>
+  </section>
+
+  <!-- ── Panel del tablero activo ──────────────────────────── -->
+  <section class="section" id="panel-tablero" role="tabpanel"
+           tabindex="-1" aria-labelledby="tab-leyes">
+
+    <nav class="steps" id="steps" aria-label="Progreso de la evaluación"></nav>
+
+    <div id="paso"></div>
+
+  </section>
+
+  <p class="hint" id="aviso-storage" hidden></p>
+
+</main>
+
+<footer class="content" style="padding-top:0">
+  <p class="hint">
+    Trabajo práctico de evaluación heurística · Diseño UX/UI ·
+    Material de referencia: las 10 heurísticas de Nielsen y las 4 leyes de UX.
+    Producto evaluado: sitio público de Wendy's Argentina, sin vínculo con la marca.
+  </p>
+</footer>
+
+<div id="capa-modal"></div>
+
+<script src="assets/principios.js"></script>
+<script src="assets/capturas.js"></script>
+<script src="assets/app.js"></script>
+</body>
+</html>

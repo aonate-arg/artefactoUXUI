@@ -1,0 +1,214 @@
+{
+  "_esquema": {
+    "_nota": "Este bloque documenta el formato y no lo lee la aplicación. Cada hallazgo lleva los ocho campos de la plantilla de evaluación heurística de UI from Mars. La prioridad NO se escribe acá: la calcula la aplicación como el promedio de gravedad y facilidad.",
+    "hallazgo": {
+      "id": "Identificador corto y estable, por ejemplo L2-01 o H09-01.",
+      "principio": "Id del principio: L1 a L4 para las leyes, H01 a H10 para las heurísticas.",
+      "titulo": "Una línea que afirma el problema concreto, no la categoría.",
+      "donde": "Pantalla o flujo exacto donde ocurre.",
+      "evidencia": "Nombre del archivo dentro de public/img/, o null.",
+      "alt": "Texto alternativo descriptivo: qué se ve en la captura, no «captura».",
+      "pie": "Pie de figura que señala el área problemática.",
+      "medicion": "La comprobación que sostiene el hallazgo, reproducible por cualquiera.",
+      "que": "Descripción precisa del problema y su efecto sobre el usuario.",
+      "gravedad": "1 a 5. Cuánto afecta al uso del producto.",
+      "facilidad": "1 a 5. Cuán fácil es de resolver.",
+      "recomendacion": "Qué hacer concretamente, con el valor cuando corresponda."
+    }
+  },
+
+  "producto": {
+    "nombre": "Wendy's Argentina",
+    "url": "wendys.com.ar",
+    "fecha": "2026-08-30",
+    "alcance": "Sitio público: home, listado de locales y entrada al flujo de pedido, en escritorio (1280 px) y en móvil (375 px). No se completó ninguna compra ni se cargaron datos personales."
+  },
+
+  "metodo": "Evaluación heurística individual sobre la interfaz pública, sin testing con usuarios. Cada hallazgo se contrasta contra la regla operativa del principio que incumple y se sostiene con una comprobación reproducible: medición de la caja de cada control, lectura del estado de foco calculado antes y después de enfocar, inspección del árbol de accesibilidad y transcripción literal de los textos de la interfaz. Los principios sin evidencia de incumplimiento se declaran cumplidos; los que exigen llegar al formulario de pago quedaron fuera del alcance y se marcan como no evaluados en vez de completarse con suposiciones.",
+
+  "tableros": {
+    "leyes": {
+      "hallazgos": [
+        {
+          "id": "L2-01",
+          "principio": "L2",
+          "titulo": "Trece de los dieciocho controles de la home móvil quedan por debajo del mínimo táctil",
+          "donde": "Home, en móvil de 375 px y en escritorio",
+          "evidencia": "02-home-movil.png",
+          "alt": "Home de Wendy's en móvil: el botón de menú y el de cuenta como cuadrados chicos arriba, y el pie con siete enlaces de texto muy juntos",
+          "pie": "El botón de menú y el de cuenta miden 36×36 px; los enlaces del pie, entre 17 y 20 px de alto.",
+          "medicion": "375 px de ancho: 13 de 18 elementos interactivos miden menos de 44 px de alto. Menú de navegación 36×36, cuenta 36×36, un enlace de 24×24, y los ocho enlaces del pie entre 17 y 20 px. En escritorio, 11 de 16: «Locales» 49×20 y «Quienes somos» 97×20.",
+          "que": "La regla de Fitts fija 44×44 px como área clicable mínima, ampliada con padding y no agrandando el texto. Acá casi todos los controles se quedan a menos de la mitad de esa altura. En móvil, donde el objetivo se toca con el pulgar, esto se traduce en toques fallidos: los enlaces del pie están además apilados con poca separación, así que un toque impreciso abre el enlace de al lado. «Pedir», que es el único acceso al pedido desde la home, mide 32×17 px.",
+          "gravedad": 3,
+          "facilidad": 4,
+          "recomendacion": "Llevar el área clicable de todo control a 44×44 px con padding, sin tocar el tamaño de la tipografía: `min-height: 44px` y padding vertical en los enlaces del pie y en los botones del encabezado. Separar los enlaces del pie con al menos 8 px de gap."
+        },
+        {
+          "id": "L3-01",
+          "principio": "L3",
+          "titulo": "En la home no hay ni acceso al pedido ni carrito en el encabezado, aunque la propia pantalla de pedido sí los tiene",
+          "donde": "Home, encabezado",
+          "evidencia": "01-home-escritorio.png",
+          "alt": "Encabezado de la home de Wendy's: logo, «Locales», «Quienes somos» y un ícono de cuenta a la derecha; no hay botón de pedido ni carrito",
+          "pie": "El encabezado de la home, sin acceso al pedido ni carrito.",
+          "medicion": "Encabezado de la home: logo, «Locales», «Quienes somos» y el botón de cuenta. Ningún control de pedido ni de carrito. En /pedir, el mismo encabezado suma un selector de local y un carrito con el total. El único enlace «Pedir» de la home está en el pie.",
+          "que": "El usuario llega con la expectativa formada por el resto de la categoría, donde el acceso al pedido y el carrito viven fijos en el encabezado y acompañan toda la navegación. Acá desaparecen justo en la pantalla de entrada y reaparecen recién dentro de /pedir, a la que hay que llegar por un enlace del pie o adivinando que los banners llevan ahí. La inconsistencia no es solo con la categoría: es con el propio sitio, que dos pantallas más adelante sí pone esos elementos donde corresponde.",
+          "gravedad": 4,
+          "facilidad": 4,
+          "recomendacion": "Llevar el mismo encabezado de /pedir a todas las pantallas: botón «Pedir» como acción primaria y carrito con total a la derecha, fijos. Antes de decidir la posición, documentar cómo lo resuelven tres productos de referencia de la categoría, como pide la regla."
+        },
+        {
+          "id": "L4-01",
+          "principio": "L4",
+          "titulo": "Los ocho locales se listan planos, sin agrupar, sin filtro y sin buscador",
+          "donde": "Página «Locales»",
+          "evidencia": "05-locales.png",
+          "alt": "Listado de los ocho locales de Wendy's, uno debajo del otro, cada uno con nombre y dirección y nada más",
+          "pie": "Ocho sucursales en un único grupo sin jerarquía, por encima del límite de siete.",
+          "medicion": "8 locales en un solo grupo sin subdivisión. La página no tiene ningún campo de entrada: 0 elementos input, select o textarea. Cada ítem muestra solo nombre y dirección, y la dirección enlaza a Google Maps.",
+          "que": "La regla de Miller fija en siete el tope de un grupo de opciones sin jerarquía; a partir de ahí hay que subdividir en categorías. Ocho sucursales sin agrupar por zona ni filtrar obligan a leer la lista entera y a saber de antemano qué dirección queda cerca. Nada indica horarios ni si el local hace envíos, así que elegir exige salir a Google Maps y volver. La navegación principal, con tres entradas, sí cumple la regla: el problema está acotado a este listado.",
+          "gravedad": 2,
+          "facilidad": 4,
+          "recomendacion": "Agrupar los locales en categorías de no más de cinco por zona (CABA norte, CABA centro, GBA) y agregar un campo de búsqueda por barrio o dirección arriba del listado. Sumar horario de atención a cada ficha."
+        }
+      ],
+      "cumple": ["L1"],
+      "cumpleNota": {
+        "L1": "En las pantallas evaluadas no se encontró exceso de opciones simultáneas: la navegación principal ofrece tres entradas, el diálogo de ubicación presenta dos caminos —compartir ubicación o buscar la dirección— y ninguna pantalla acumula decisiones que compitan entre sí. El problema de esas pantallas es el contrario, y se reporta en la heurística 08."
+      }
+    },
+
+    "heuristicas": {
+      "hallazgos": [
+        {
+          "id": "H01-01",
+          "principio": "H01",
+          "titulo": "Ningún elemento interactivo del sitio muestra el foco del teclado",
+          "donde": "Todo el sitio: encabezado, banners, pie y diálogos",
+          "evidencia": "07-foco-teclado.png",
+          "alt": "Un enlace del encabezado con el foco puesto con la tecla Tab, sin ningún cambio visible respecto de los demás",
+          "pie": "El control tiene el foco y no se distingue de los que no lo tienen.",
+          "medicion": "Se enfocaron por código los 14 primeros controles de la home —logo, «Locales», «Quienes somos», cuenta, los cuatro banners, los cinco enlaces del pie y «Pedir»— leyendo el estilo calculado antes y después. En los 14, `outline-style` vale `none` en los dos momentos y `box-shadow` no cambia.",
+          "que": "La regla pide estados visibles de hover, focus, active y disabled en todo elemento interactivo. Acá el foco es invisible en todos los casos: quien navega con el teclado avanza a ciegas, sin saber nunca sobre qué control está parado ni qué va a pasar al pulsar Enter. Afecta a quien no puede usar el mouse, pero también a cualquiera que use Tab para moverse por un formulario. No es un descuido puntual de un componente: es la ausencia de la regla en todo el sitio.",
+          "gravedad": 4,
+          "facilidad": 5,
+          "recomendacion": "Agregar una única regla global de foco y no volver a anularla: `:where(a, button, input, select, textarea, [tabindex]):focus-visible { outline: 2px solid <color de marca>; outline-offset: 2px; }`. Nunca declarar `outline: none` sin reemplazo."
+        },
+        {
+          "id": "H09-01",
+          "principio": "H09",
+          "titulo": "La pantalla de pedido abre diciendo «No hay productos en el menú», que además es falso",
+          "donde": "/pedir, al entrar sin haber elegido dónde pedir",
+          "evidencia": "03-pedir-sin-local.png",
+          "alt": "Pantalla de pedido de Wendy's, vacía, con el texto «No hay productos en el menú» centrado y el selector «¿Dónde quieres pedir?» arriba a la izquierda",
+          "pie": "El mensaje ocupa el centro de la pantalla; el selector que lo resuelve mide 224×36 px arriba a la izquierda.",
+          "medicion": "Al abrir wendys.com.ar/pedir sin ubicación elegida, el cuerpo de la página contiene un único mensaje: «No hay productos en el menú». No hay indicador de carga, ni explicación, ni ningún control junto al mensaje. El selector «¿Dónde quieres pedir?» mide 224×36 px y está en la barra superior izquierda.",
+          "que": "La regla pide que todo mensaje diga qué pasó, por qué y qué hacer a continuación. Este dice una sola cosa, y es falsa: hay menú, lo que falta es elegir dónde pedir. Quien llega desde un banner de la home a esta pantalla se encuentra con un local vacío y ninguna instrucción, y la conclusión razonable es que el sitio no funciona o que no hay stock. La acción que lo resuelve existe, pero está lejos del mensaje, arriba a la izquierda, y no está señalada.",
+          "gravedad": 5,
+          "facilidad": 4,
+          "recomendacion": "Reemplazar el mensaje por un estado que explique y resuelva: «Elegí dónde querés pedir para ver el menú», con el botón de elección de local como acción primaria en el centro de la pantalla, junto al texto. Reservar «No hay productos en el menú» para el caso real de un local sin productos disponibles."
+        },
+        {
+          "id": "H02-01",
+          "principio": "H02",
+          "titulo": "El sitio mezcla el voseo de su propio contenido con el tuteo de la plataforma de pedidos",
+          "donde": "Home, título de /pedir y diálogo de dirección",
+          "evidencia": "04-dialogo-direccion.png",
+          "alt": "Diálogo «Ingresa dirección de entrega» con los textos «¿Ya tienes una cuenta?» e «Inicia sesión con ella», todos en tuteo",
+          "pie": "Tres formas verbales en tuteo dentro de un mismo diálogo, en un sitio declarado es-AR.",
+          "medicion": "El documento declara `lang=\"es-AR\"`. Textos propios de la marca, en voseo: «Pedila en formato simple o doble», «Trabajá con nosotros». Textos de la plataforma de pedidos, en tuteo: título «Pide», «¿Dónde quieres pedir?», «Ingresa dirección de entrega», «¿Ya tienes una cuenta?», «Inicia sesión con ella», «Ingresa una nueva dirección».",
+          "que": "La regla pide que cada mensaje se escriba en el vocabulario del usuario. En Argentina el trato es voseo, y el sitio lo usa cuando escribe su propio contenido. En cuanto empieza el flujo de pedido, el trato cambia a tuteo neutro. El cambio ocurre en la mitad de la tarea, sin que nada lo justifique, y delata que la parte que maneja la plata es una plataforma de terceros sin traducir. La confianza se paga justo donde más importa: en el paso de pagar.",
+          "gravedad": 3,
+          "facilidad": 4,
+          "recomendacion": "Pasar todos los textos de la plataforma de pedidos a voseo rioplatense, empezando por los que aparecen en el flujo de compra: «¿Dónde querés pedir?», «Ingresá tu dirección de entrega», «¿Ya tenés una cuenta?», «Iniciá sesión con ella». Fijar el voseo como norma de contenido para no volver a mezclar registros."
+        },
+        {
+          "id": "H08-01",
+          "principio": "H08",
+          "titulo": "La home no tiene ninguna acción primaria: la tarea principal del producto no tiene botón",
+          "donde": "Home",
+          "evidencia": "01-home-escritorio.png",
+          "alt": "Home de Wendy's: título de la hamburguesa nueva, texto descriptivo y una foto grande, sin ningún botón",
+          "pie": "La pantalla de entrada no ofrece un solo botón: el bloque principal es texto y foto.",
+          "medicion": "Home en escritorio: 16 elementos interactivos, ninguno con forma de botón primario. El bloque principal es un título, un párrafo y una imagen sin control. Los cuatro banners son enlaces de imagen sin texto. El único enlace «Pedir» está en el pie y mide 32×17 px.",
+          "que": "La regla pide una sola acción primaria por pantalla, visualmente distinta de todas las demás. Acá no hay ninguna: la home presenta una hamburguesa nueva y termina en «Pedila en formato simple o doble», una instrucción sin nada que pulsar al lado. Todo lo clicable pesa igual —dos entradas de menú, cuatro imágenes mudas, siete enlaces de pie— y nada indica por dónde se pide. La jerarquía que la regla pide construir con tamaño, peso y espacio no está construida en ningún lado.",
+          "gravedad": 4,
+          "facilidad": 4,
+          "recomendacion": "Poner un único botón primario «Pedí ahora» al final del bloque de la hamburguesa nueva, con el mismo color de marca y sin ningún otro botón del mismo peso en la pantalla, y repetirlo en el encabezado. Bajar el resto de los enlaces a un nivel visual secundario."
+        },
+        {
+          "id": "H06-01",
+          "principio": "H06",
+          "titulo": "Los tres controles del menú de pedido son solo ícono, sin etiqueta visible ni tooltip",
+          "donde": "/pedir, barra superior del menú",
+          "evidencia": "03-pedir-sin-local.png",
+          "alt": "Barra del menú de pedido con una lupa a la izquierda y tres puntos verticales a la derecha, sin ninguna palabra",
+          "pie": "Buscar, «Ver categorías» y el carrito: tres funciones, cero etiquetas visibles.",
+          "medicion": "Buscar: 20×20 px, `aria-label=\"Buscar\"`, sin texto visible. «Ver categorías»: 36×36 px, ícono de tres puntos verticales, `aria-label=\"Ver categorías\"`, sin texto visible. Carrito: 80×36 px, muestra el total «$0» y un ícono, sin la palabra «carrito». Ninguno de los tres tiene `title`, así que tampoco aparece un tooltip nativo al pasar el mouse.",
+          "que": "La regla pide que los íconos de acción principal lleven etiqueta visible y que los íconos sin etiqueta lleven al menos tooltip. Acá no hay ni una cosa ni la otra. El caso más caro es el de los tres puntos verticales: por convención ese ícono significa «más opciones», y acá esconde la navegación por categorías del menú, que es la forma principal de recorrer la carta. El usuario que vuelve cada tanto tiene que descubrirlo por ensayo y error.",
+          "gravedad": 3,
+          "facilidad": 4,
+          "recomendacion": "Poner etiqueta de texto visible junto a cada ícono: «Buscar», «Categorías» y «Carrito». Sacar las categorías de detrás del ícono de tres puntos y mostrarlas como una fila de pestañas sobre el menú."
+        },
+        {
+          "id": "H04-01",
+          "principio": "H04",
+          "titulo": "La misma acción se llama de dos maneras distintas, y hasta la marca se escribe de dos formas",
+          "donde": "Encabezado y pie de todo el sitio, diálogo de dirección y listado de locales",
+          "evidencia": "06-pie-de-pagina.png",
+          "alt": "Pie de página de Wendy's con la columna «Mi cuenta», donde figura «Iniciar sesión», la misma acción que el encabezado llama «Login»",
+          "pie": "El pie dice «Iniciar sesión»; el encabezado, «Login».",
+          "medicion": "Misma acción, dos nombres: el botón del encabezado se llama «Login» y el enlace del pie, «Iniciar sesión». Dentro del diálogo de dirección conviven dos controles de cierre: uno etiquetado «Cerrar» y la cruz, cuyo nombre accesible es «Close». En el listado de locales: «WENDY´S PLAZA OESTE» con acento agudo y «WENDY'S DOT» con apóstrofo recto; además «ALTO AVELLENEDA» por Avellaneda.",
+          "que": "La regla pide que un mismo concepto se llame siempre igual en toda la aplicación. Acá el usuario que busca su cuenta encuentra dos nombres para lo mismo según dónde mire, y en un solo diálogo se le ofrecen dos botones de cerrar con la etiqueta en dos idiomas. Cada inconsistencia obliga a detenerse un instante a confirmar que se trata de lo mismo, y en conjunto dan la impresión de un sitio ensamblado con piezas de distinta procedencia.",
+          "gravedad": 2,
+          "facilidad": 5,
+          "recomendacion": "Fijar un único nombre por concepto y aplicarlo en todas las pantallas: «Iniciar sesión» en el encabezado y en el pie, «Cerrar» también como nombre accesible de la cruz. Normalizar la marca a «WENDY'S» con apóstrofo recto en todo el listado y corregir «AVELLENEDA» por «AVELLANEDA»."
+        },
+        {
+          "id": "H06-02",
+          "principio": "H06",
+          "titulo": "Los cuatro banners de la home son enlaces sin texto, con «...» como texto alternativo",
+          "donde": "Home, franja de banners",
+          "evidencia": "01-home-escritorio.png",
+          "alt": "Los cuatro banners promocionales de la home, imágenes grandes sin ningún texto de interfaz alrededor",
+          "pie": "Cuatro destinos distintos detrás de cuatro imágenes sin etiqueta.",
+          "medicion": "Los cuatro enlaces de la franja miden 640×457 px y no contienen texto. El `alt` de sus imágenes es literalmente «...» en los cuatro. Sus destinos son distintos entre sí: /TrabajaConNosotros, /cupones y dos productos concretos dentro de /pedir.",
+          "que": "Son los elementos más grandes de la pantalla y los únicos que llevan al pedido, pero no dicen a dónde van. Con un `alt` de tres puntos, quien usa lector de pantalla escucha cuatro enlaces indistinguibles; quien ve las imágenes tiene que interpretar una foto para adivinar si lo lleva al menú, a un cupón o a un formulario de empleo. Uno de los cuatro, además, lleva a una búsqueda de trabajo desde la misma franja donde los otros llevan a comprar.",
+          "gravedad": 3,
+          "facilidad": 5,
+          "recomendacion": "Escribir un `alt` que describa la promoción concreta de cada banner y agregar una etiqueta de texto visible sobre cada imagen con el destino («Ver cupones», «Pedir Crispy Onion»). Sacar el banner de empleo de la franja de promociones de compra."
+        },
+        {
+          "id": "H03-01",
+          "principio": "H03",
+          "titulo": "El diálogo de dirección no se cierra con la tecla Esc",
+          "donde": "/pedir, diálogo «Ingresa dirección de entrega»",
+          "evidencia": "04-dialogo-direccion.png",
+          "alt": "Diálogo de dirección de entrega abierto sobre la pantalla de pedido, con una cruz arriba a la derecha y un botón «Cerrar» abajo",
+          "pie": "Dos controles de cierre visibles, pero la tecla Esc no hace nada.",
+          "medicion": "Con el diálogo abierto se pulsó Esc con una pulsación real de teclado. Después de la pulsación, el elemento con `role=\"dialog\"` sigue en el documento y el foco sigue en el botón «Cerrar». El diálogo tampoco declara `aria-modal`.",
+          "que": "La regla pide que todo modal se cierre con Esc y con un control visible. Los controles visibles están —de hecho hay dos—, pero Esc no hace nada. Esc es el gesto aprendido para salir de cualquier capa superpuesta, y es el primero que prueba quien no quiere dar su dirección todavía. Cuando no responde, la sensación es la de estar atrapado en el diálogo, justo en el momento en que el sitio pide un dato personal.",
+          "gravedad": 2,
+          "facilidad": 5,
+          "recomendacion": "Cerrar el diálogo con Esc además de con sus dos controles, y agregarle `aria-modal=\"true\"` para que los lectores de pantalla lo anuncien como capa modal."
+        },
+        {
+          "id": "H06-03",
+          "principio": "H06",
+          "titulo": "El campo de dirección solo se rotula con el placeholder, que desaparece al escribir",
+          "donde": "/pedir, diálogo «Ingresa dirección de entrega»",
+          "evidencia": "04-dialogo-direccion.png",
+          "alt": "Campo de texto del diálogo de dirección con el texto gris «Buscar dirección...» dentro, sin etiqueta encima",
+          "pie": "El único rótulo del campo vive dentro del campo.",
+          "medicion": "El campo no tiene `<label>` asociado ni `aria-label`: su único rótulo es el `placeholder=\"Buscar dirección...\"`, que el navegador oculta en cuanto se escribe el primer carácter.",
+          "que": "La regla pide que ninguna información necesaria para completar el paso actual esté oculta detrás de una interacción. Acá el rótulo desaparece precisamente al empezar a usar el campo: quien se distrae a mitad de la dirección vuelve a un cuadro con texto y sin ninguna pista de qué se esperaba ahí. Es el único campo del paso, así que el costo es acotado, pero el patrón es el mismo que rompe los formularios largos.",
+          "gravedad": 2,
+          "facilidad": 5,
+          "recomendacion": "Poner una etiqueta visible encima del campo —«Dirección de entrega»— y dejar el placeholder solo para el ejemplo de formato («Av. Corrientes 3247, CABA»)."
+        }
+      ],
+      "cumple": [],
+      "cumpleNota": {}
+    }
+  }
+}
