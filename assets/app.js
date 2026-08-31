@@ -258,20 +258,53 @@
 
   /* ═══════════════ PASO 1 · SELECCIÓN ═══════════════ */
 
+  /* Ley de Miller: ningún grupo de opciones sin jerarquía supera los siete
+     elementos; a partir de ahí se subdivide en categorías. El tablero de
+     heurísticas tiene 10 principios, así que no puede mostrarse como una
+     sola lista plana. Se subdivide en bloques de a cinco, numerados por
+     rango — no se inventa una taxonomía temática que Nielsen no definió.
+     Con siete o menos (el tablero de leyes, con 4) no hace falta subdividir. */
+  function agruparPorMiller(lista) {
+    if (lista.length <= 7) return [{ titulo: null, items: lista }];
+    var grupos = [];
+    for (var i = 0; i < lista.length; i += 5) {
+      var bloque = lista.slice(i, i + 5);
+      var desde = bloque[0].num, hasta = bloque[bloque.length - 1].num;
+      grupos.push({
+        titulo: desde === hasta ? ('Heurística ' + desde) : ('Heurísticas ' + desde + '–' + hasta),
+        items: bloque
+      });
+    }
+    return grupos;
+  }
+
+  function filaCheck(p, st) {
+    var marcado = st.sel.indexOf(p.id) !== -1;
+    return '<label class="check">' +
+      '<input type="checkbox" data-pid="' + p.id + '"' + (marcado ? ' checked' : '') + '>' +
+      '<span class="stack gap-1">' +
+        '<span class="check__name"><span class="check__num">' + esc(p.codigo) + ' · </span>' +
+          esc(p.nombre) + '</span>' +
+        '<span class="check__desc">' + esc(p.desc) + '</span>' +
+      '</span>' +
+    '</label>';
+  }
+
   function pintarPaso1() {
     var st = t(), meta = metaTablero(), lista = principiosDe(estado.activo);
     var n = st.sel.length;
 
-    var filas = lista.map(function (p) {
-      var marcado = st.sel.indexOf(p.id) !== -1;
-      return '<label class="check">' +
-        '<input type="checkbox" data-pid="' + p.id + '"' + (marcado ? ' checked' : '') + '>' +
-        '<span class="stack gap-1">' +
-          '<span class="check__name"><span class="check__num">' + esc(p.codigo) + ' · </span>' +
-            esc(p.nombre) + '</span>' +
-          '<span class="check__desc">' + esc(p.desc) + '</span>' +
-        '</span>' +
-      '</label>';
+    /* Ley de Hick: "todo campo con un valor previsible viene con un valor
+       por defecto" — acá no aplica a propósito. Elegir qué evaluar es la
+       tarea misma del paso 1, no un trámite a acelerar: preseleccionar
+       algo le sacaría al usuario la decisión activa que sostiene todo el
+       ejercicio de evaluación a ciegas. Excepción documentada, no
+       improvisada. */
+    var filas = agruparPorMiller(lista).map(function (g) {
+      var items = g.items.map(function (p) { return filaCheck(p, st); }).join('');
+      return g.titulo
+        ? '<div class="picker__group"><p class="picker__group-title">' + esc(g.titulo) + '</p>' + items + '</div>'
+        : items;
     }).join('');
 
     return '' +
