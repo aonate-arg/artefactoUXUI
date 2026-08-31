@@ -16,10 +16,20 @@
   <div class="topbar__brand">
     <span class="mark" aria-hidden="true">UX</span>
     <span class="topbar__name">Tableros de evaluación UX</span>
-    <span class="topbar__ctx" id="topbar-ctx">Diseño UX/UI</span>
   </div>
-  <button type="button" class="btn btn--ghost" id="theme-toggle" aria-pressed="false">
-    Tema claro
+  <button type="button" class="btn btn--ghost btn--icon" id="theme-toggle"
+          aria-pressed="false" title="Tema claro">
+    <svg class="icon-theme icon-theme--sun" width="16" height="16" viewBox="0 0 24 24"
+         fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"
+         stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="4.2"/>
+      <path d="M12 2.5v2.4M12 19.1v2.4M4.2 4.2l1.7 1.7M18.1 18.1l1.7 1.7M2.5 12h2.4M19.1 12h2.4M4.2 19.8l1.7-1.7M18.1 5.9l1.7-1.7"/>
+    </svg>
+    <svg class="icon-theme icon-theme--moon" width="16" height="16" viewBox="0 0 24 24"
+         fill="currentColor" aria-hidden="true">
+      <path d="M20.2 14.9A8.6 8.6 0 1 1 9.1 3.8a7 7 0 0 0 11.1 11.1Z"/>
+    </svg>
+    <span class="sr-only" id="theme-toggle-label">Tema claro</span>
   </button>
 </header>
 
@@ -37,27 +47,37 @@
       </p>
     </div>
 
-    <div class="callout callout--info">
-      <p class="callout__title">Los tableros no se muestran de entrada</p>
-      <p>
-        Primero elegís qué principios vas a analizar y cargás tus propios hallazgos.
-        Cuando cerrás tu evaluación se despliega el tablero completo y podés
-        contrastarlo con lo que viste vos. Es para que formes tu criterio sin
-        anclarte en el nuestro.
-      </p>
-    </div>
+    <div class="stack gap-4">
+      <div class="callout callout--info">
+        <p class="callout__title">Los tableros no se muestran de entrada</p>
+        <p>
+          Primero elegís qué principios vas a analizar y cargás tus propios hallazgos.
+          Cuando cerrás tu evaluación se despliega el tablero completo y podés
+          contrastarlo con lo que viste vos. Es para que formes tu criterio sin
+          anclarte en el nuestro.
+        </p>
+      </div>
 
-    <div class="tabs" role="tablist" aria-label="Elegí el tablero">
-      <button type="button" class="tab" role="tab" id="tab-leyes"
-              aria-selected="true" aria-controls="panel-tablero" data-tablero="leyes">
-        Tablero A · Leyes de UX
-        <span class="label" id="estado-leyes"></span>
-      </button>
-      <button type="button" class="tab" role="tab" id="tab-heuristicas"
-              aria-selected="false" aria-controls="panel-tablero" data-tablero="heuristicas">
-        Tablero B · Heurísticas de Nielsen
-        <span class="label" id="estado-heuristicas"></span>
-      </button>
+      <div class="board-picker" role="tablist" aria-label="Elegí el tablero">
+        <button type="button" class="board-pick" role="tab" id="tab-leyes"
+                aria-selected="true" aria-controls="panel-tablero" data-tablero="leyes">
+          <span class="board-pick__top">
+            <span class="steps__num" aria-hidden="true">A</span>
+            <span class="label" id="estado-leyes"></span>
+          </span>
+          <span class="board-pick__title">Leyes de UX</span>
+          <span class="board-pick__desc">Hick, Fitts, Jakob y Miller</span>
+        </button>
+        <button type="button" class="board-pick" role="tab" id="tab-heuristicas"
+                aria-selected="false" aria-controls="panel-tablero" data-tablero="heuristicas">
+          <span class="board-pick__top">
+            <span class="steps__num" aria-hidden="true">B</span>
+            <span class="label" id="estado-heuristicas"></span>
+          </span>
+          <span class="board-pick__title">Heurísticas de Nielsen</span>
+          <span class="board-pick__desc">Las diez heurísticas de usabilidad</span>
+        </button>
+      </div>
     </div>
   </section>
 

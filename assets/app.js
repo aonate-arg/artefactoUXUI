@@ -1444,12 +1444,18 @@
   });
 
   var botonTema = document.getElementById('theme-toggle');
+  var etiquetaTema = document.getElementById('theme-toggle-label');
   function aplicarTema() {
     if (estado.tema) document.documentElement.setAttribute('data-theme', estado.tema);
     var oscuro = estado.tema
       ? estado.tema === 'dark'
       : !window.matchMedia('(prefers-color-scheme: light)').matches;
-    botonTema.textContent = oscuro ? 'Tema claro' : 'Tema oscuro';
+    /* El botón es un icono sol/luna (ley de Jakob); el texto no se pisa,
+       solo se actualiza el título y el nombre accesible — heurística 06:
+       todo icono sin etiqueta visible lleva tooltip. */
+    var texto = oscuro ? 'Tema claro' : 'Tema oscuro';
+    botonTema.setAttribute('title', texto);
+    if (etiquetaTema) etiquetaTema.textContent = texto;
     botonTema.setAttribute('aria-pressed', String(!oscuro));
   }
   botonTema.addEventListener('click', function () {
