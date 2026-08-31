@@ -377,16 +377,21 @@
     var hechos = cuantosEvaluados(estado.activo);
     var pct = st.sel.length ? Math.round((hechos / st.sel.length) * 100) : 0;
 
-    var nav = st.sel.map(function (pid) {
-      var pr = principio(pid);
-      var listo = evaluado(estado.activo, pid);
-      var cuantos = (st.hal[pid] || []).length;
-      var marca = st.sin[pid] ? 'cumple' : (cuantos ? cuantos + (cuantos === 1 ? ' hallazgo' : ' hallazgos') : '—');
-      return '<button type="button" data-ir="' + pid + '"' +
-        (pid === st.foco ? ' aria-current="true"' : '') + '>' +
-        '<span>' + esc(pr.codigo) + ' · ' + esc(pr.corto) + '</span>' +
-        '<span class="eval__state">' + esc(listo ? marca : '—') + '</span>' +
-      '</button>';
+    /* Mismo criterio que el picker del paso 1 (ley de Miller): si el
+       usuario seleccionó más de siete principios, el nav no puede ser
+       una lista plana. */
+    var nav = agruparPorMiller(st.sel.map(principio)).map(function (g) {
+      var items = g.items.map(function (pr) {
+        var listo = evaluado(estado.activo, pr.id);
+        var cuantos = (st.hal[pr.id] || []).length;
+        var marca = st.sin[pr.id] ? 'cumple' : (cuantos ? cuantos + (cuantos === 1 ? ' hallazgo' : ' hallazgos') : '—');
+        return '<button type="button" data-ir="' + pr.id + '"' +
+          (pr.id === st.foco ? ' aria-current="true"' : '') + '>' +
+          '<span>' + esc(pr.codigo) + ' · ' + esc(pr.corto) + '</span>' +
+          '<span class="eval__state">' + esc(listo ? marca : '—') + '</span>' +
+        '</button>';
+      }).join('');
+      return g.titulo ? '<p class="eval__nav-group-title">' + esc(g.titulo) + '</p>' + items : items;
     }).join('');
 
     return '' +
@@ -418,7 +423,12 @@
 
       '<div class="actionbar">' +
         '<button type="button" class="btn btn--ghost" id="volver-paso1">Volver a la selección</button>' +
-        '<button type="button" class="btn btn--primary" id="ir-paso3">Cerrar mi evaluación</button>' +
+        /* Secundario a propósito: la acción primaria de esta pantalla es
+           guardar el hallazgo que se está cargando (ver #f-guardar), no
+           cerrar la evaluación — eso pasa una sola vez, esto se repite
+           por cada principio. Heurística 08: la acción primaria visible
+           es la que corresponde a la tarea del momento. */
+        '<button type="button" class="btn btn--secondary" id="ir-paso3">Cerrar mi evaluación</button>' +
       '</div>' +
     '</div>';
   }
@@ -441,7 +451,10 @@
             '<p class="hint">' + esc(h.donde) + ' · gravedad <span class="num">' + h.gravedad +
               '</span> · facilidad <span class="num">' + h.facilidad +
               '</span> · prioridad <span class="num">' + unDecimal(prioridad(h.gravedad, h.facilidad)) + '</span></p>' +
-            '<div class="row">' +
+            /* row--between, no row: ley de Fitts — "las acciones destructivas
+               se separan físicamente de las frecuentes". Editar se va a
+               clickear muchas veces por sesión; Quitar, casi nunca. */
+            '<div class="row between">' +
               '<button type="button" class="btn btn--ghost" data-editar="' + h.id + '">Editar</button>' +
               '<button type="button" class="btn btn--danger" data-borrar="' + h.id + '">Quitar</button>' +
             '</div>' +
@@ -497,7 +510,7 @@
         '</div>' +
 
         '<div class="row">' +
-          '<button type="submit" class="btn btn--secondary" id="f-guardar">' +
+          '<button type="submit" class="btn btn--primary" id="f-guardar">' +
             (d.id ? 'Guardar los cambios' : 'Agregar este hallazgo') + '</button>' +
           (d.id ? '<button type="button" class="btn btn--ghost" id="f-cancelar">Cancelar la edición</button>' : '') +
         '</div>' +
