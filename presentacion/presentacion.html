@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Tableros de evaluación UX · Wendy's Argentina</title>
+<style>
+  @page { size: 1280px 720px; margin: 0; }
+  * { box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #08090B;
+    font-family: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: #EDEFF3;
+  }
+
+  :root {
+    --bg: #08090B;
+    --surface: #101216;
+    --surface-2: #171A20;
+    --surface-3: #1E222A;
+    --line: #21252D;
+    --line-strong: #2C313B;
+    --text: #EDEFF3;
+    --text-2: #A7AEBB;
+    --text-3: #7B8391;
+    --accent: #35E0C8;
+    --accent-ink: #04211D;
+    --accent-tint: rgba(53,224,200,.10);
+    --accent-2: #FF7A59;
+    --accent-2-tint: rgba(255,122,89,.12);
+    --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  .slide {
+    width: 1280px;
+    height: 720px;
+    position: relative;
+    overflow: hidden;
+    padding: 72px 88px;
+    display: flex;
+    flex-direction: column;
+    page-break-after: always;
+    background: var(--bg);
+  }
+  .slide:last-of-type { page-break-after: avoid; }
+
+  /* nebulosa de fondo, igual criterio que la app */
+  .slide::before {
+    content: '';
+    position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background-image:
+      radial-gradient(560px 380px at 4% -10%, rgba(53,224,200,.16), transparent 60%),
+      radial-gradient(520px 360px at 104% 4%, rgba(255,122,89,.14), transparent 62%),
+      radial-gradient(circle at 1px 1px, var(--line) 1px, transparent 0);
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-size: auto, auto, 28px 28px;
+    mask-image: linear-gradient(to bottom, black, black 55%, transparent 100%);
+  }
+  .slide > * { position: relative; z-index: 1; }
+
+  .eyebrow {
+    display: inline-flex; align-items: center; gap: 10px;
+    font: 500 13px/1.3 var(--mono);
+    letter-spacing: .16em; text-transform: uppercase;
+    color: var(--text-3);
+    margin-bottom: 18px;
+  }
+  .eyebrow::before {
+    content: ''; width: 9px; height: 9px; border-radius: 999px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  }
+
+  .kicker {
+    font: 500 13px/1.3 var(--mono);
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  h1 { font: 700 60px/1.05 inherit; letter-spacing: -.03em; margin: 0 0 20px; color: var(--text); }
+  h2 { font: 700 42px/1.12 inherit; letter-spacing: -.025em; margin: 0 0 34px; color: var(--text); }
+  p.lead { font-size: 20px; line-height: 1.55; color: var(--text-2); max-width: 62ch; margin: 0; }
+
+  .foot {
+    position: absolute; left: 88px; right: 88px; bottom: 40px;
+    display: flex; justify-content: space-between; align-items: center;
+    font: 500 12px/1 var(--mono); letter-spacing: .08em; text-transform: uppercase;
+    color: var(--text-3); z-index: 1;
+  }
+  .foot .n { color: var(--text-2); }
+
+  .mark {
+    width: 30px; height: 30px; border-radius: 9px; flex: none;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    display: grid; place-items: center;
+    font: 700 13px/1 var(--mono); color: var(--accent-ink);
+    box-shadow: 0 8px 26px -10px rgba(53,224,200,.5);
+  }
+  .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 40px; }
+  .brand__name { font: 600 15px/1 inherit; color: var(--text); }
+
+  /* ── portada ─────────────────────────────────────────── */
+  .cover { justify-content: center; }
+  .cover .mascota {
+    position: absolute; right: 78px; top: 50%; transform: translateY(-50%);
+    width: 300px; z-index: 1;
+    filter: drop-shadow(0 24px 60px rgba(53,224,200,.22));
+  }
+  .cover h1, .cover p.lead, .cover .badges { max-width: 780px; }
+  .cover .badges { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 40px; }
+  .badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 16px; border-radius: 999px;
+    border: 1px solid var(--line-strong);
+    background: var(--surface-2);
+    font: 500 13px/1 var(--mono); color: var(--text-2);
+    white-space: nowrap;
+  }
+  .badge b { color: var(--text); font-weight: 600; }
+  .cover .url { color: var(--accent); font-family: var(--mono); }
+
+  /* ── listas de objetivos ─────────────────────────────── */
+  .obj-list { display: flex; flex-direction: column; gap: 20px; max-width: 980px; }
+  .obj {
+    display: grid; grid-template-columns: 44px 1fr; gap: 22px;
+    align-items: start;
+    padding: 22px 26px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+  .obj__n {
+    width: 40px; height: 40px; border-radius: 999px;
+    display: grid; place-items: center;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    background: var(--accent-tint);
+    font: 600 15px/1 var(--mono); color: var(--accent);
+  }
+  .obj__title { font: 600 18px/1.4 inherit; color: var(--text); margin: 0 0 6px; }
+  .obj__desc { font-size: 15px; line-height: 1.55; color: var(--text-2); margin: 0; }
+
+  /* ── funcionalidad: dos columnas ─────────────────────── */
+  .cols { display: grid; grid-template-columns: 1.15fr .85fr; gap: 40px; flex: 1; min-height: 0; }
+  .steps4 { display: flex; flex-direction: column; gap: 14px; }
+  .step {
+    display: grid; grid-template-columns: 34px 1fr; gap: 16px;
+    padding: 16px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+  }
+  .step__n {
+    width: 30px; height: 30px; border-radius: 999px;
+    display: grid; place-items: center;
+    border: 1px solid var(--line-strong);
+    font: 600 13px/1 var(--mono); color: var(--text-3);
+  }
+  .step__t { font: 600 15px/1.4 inherit; color: var(--text); margin: 0 0 3px; }
+  .step__d { font-size: 13.5px; line-height: 1.5; color: var(--text-2); margin: 0; }
+
+  .boardcard {
+    padding: 22px 24px;
+    border-radius: 18px;
+    background: var(--surface);
+    border: 1px solid var(--line-strong);
+    margin-bottom: 16px;
+  }
+  .boardcard.b { --a: var(--accent-2); }
+  .boardcard.a { --a: var(--accent); }
+  .boardcard { box-shadow: inset 3px 0 0 var(--a, var(--accent)); }
+  .boardcard__top { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+  .boardcard__badge {
+    width: 24px; height: 24px; border-radius: 999px;
+    display: grid; place-items: center;
+    background: var(--a, var(--accent)); color: var(--accent-ink);
+    font: 700 11px/1 var(--mono);
+  }
+  .boardcard__title { font: 600 17px/1.3 inherit; color: var(--text); }
+  .boardcard__desc { font-size: 13.5px; color: var(--text-2); line-height: 1.5; }
+
+  .feature-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: auto; }
+  .feature-row .badge { font-size: 11.5px; padding: 6px 12px; }
+
+  /* ── leyes: 4 tarjetas ────────────────────────────────── */
+  .laws-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; flex: 1; min-height: 0; }
+  .law {
+    padding: 24px 26px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .law__code { font: 500 12px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+  .law__name { font: 600 21px/1.3 inherit; color: var(--text); }
+  .law__desc { font-size: 14.5px; line-height: 1.55; color: var(--text-2); }
+
+  /* ── heurísticas: grilla compacta 2x5 ─────────────────── */
+  .heur-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 20px; flex: 1; min-height: 0; }
+  .heur {
+    display: grid; grid-template-columns: 30px 1fr; gap: 12px;
+    align-items: start;
+    padding: 12px 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .heur__n {
+    font: 600 12px/1 var(--mono); color: var(--accent-2);
+    width: 26px; height: 26px; border-radius: 999px;
+    border: 1px solid color-mix(in srgb, var(--accent-2) 45%, transparent);
+    background: var(--accent-2-tint);
+    display: grid; place-items: center;
+  }
+  .heur__name { font: 600 13.5px/1.35 inherit; color: var(--text); margin: 0 0 3px; }
+  .heur__desc { font-size: 12px; line-height: 1.4; color: var(--text-2); margin: 0; }
+
+  /* ── metodología ──────────────────────────────────────── */
+  .method-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; min-height: 0; }
+  .method-steps { display: flex; flex-direction: column; gap: 16px; counter-reset: m; }
+  .mstep {
+    display: grid; grid-template-columns: 30px 1fr; gap: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid var(--line);
+  }
+  .mstep:last-child { border-bottom: 0; }
+  .mstep__n {
+    counter-increment: m; font: 600 13px/1.6 var(--mono); color: var(--text-3);
+  }
+  .mstep__n::before { content: counter(m); }
+  .mstep__t { font: 600 15.5px/1.4 inherit; color: var(--text); margin: 0 0 3px; }
+  .mstep__d { font-size: 13.5px; line-height: 1.5; color: var(--text-2); margin: 0; }
+
+  .stack-card {
+    padding: 24px 26px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    display: flex; flex-direction: column; gap: 14px;
+  }
+  .stack-card h3 { font: 600 15px/1.3 inherit; color: var(--text); margin: 0; }
+  .stack-list { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; list-style: none; }
+  .stack-list li { font-size: 13.5px; line-height: 1.55; color: var(--text-2); padding-left: 18px; position: relative; }
+  .stack-list li::before {
+    content: ''; position: absolute; left: 0; top: 7px;
+    width: 6px; height: 6px; border-radius: 999px;
+    background: var(--accent);
+  }
+
+  /* ── resultados ───────────────────────────────────────── */
+  .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .metric-card {
+    padding: 24px 26px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+  .metric-card__label { font: 500 12px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); margin-bottom: 12px; }
+  .metric-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 6px; }
+  .metric-row .v { font: 400 34px/1 var(--mono); color: var(--text); }
+  .metric-row .l { font-size: 14px; color: var(--text-2); }
+
+  .top3 { display: flex; flex-direction: column; gap: 12px; margin-top: 28px; }
+  .top3-item {
+    display: grid; grid-template-columns: 26px 1fr auto; gap: 14px; align-items: center;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+  }
+  .top3-item .r { font: 600 12px/1 var(--mono); color: var(--text-3); }
+  .top3-item .t { font: 600 14.5px/1.4 inherit; color: var(--text); }
+  .top3-item .s { font: 400 16px/1 var(--mono); color: var(--accent-2); }
+
+  /* ── cierre ───────────────────────────────────────────── */
+  .closing { justify-content: center; align-items: flex-start; }
+  .closing .links { display: flex; flex-direction: column; gap: 14px; margin-top: 36px; }
+  .link-row { display: flex; align-items: center; gap: 14px; font-size: 16px; color: var(--text-2); }
+  .link-row .tag { font: 500 11px/1 var(--mono); letter-spacing: .1em; text-transform: uppercase; color: var(--text-3); width: 110px; flex: none; }
+  .link-row .val { color: var(--text); font-family: var(--mono); }
+</style>
+</head>
+<body>
+
+<!-- 1 · PORTADA -->
+<section class="slide cover">
+  <div class="brand">
+    <span class="mark">UX</span>
+    <span class="brand__name">Tableros de evaluación UX</span>
+  </div>
+  <span class="eyebrow">Diseño UX/UI · Trabajo práctico</span>
+  <h1>Evaluación heurística<br>de un producto real</h1>
+  <p class="lead">
+    Wendy's Argentina — <span class="url">wendys.com.ar</span> — evaluado contra las
+    cuatro leyes de UX y las diez heurísticas de Nielsen, detrás de un flujo de
+    evaluación a ciegas que primero pide criterio propio y recién después muestra
+    el veredicto.
+  </p>
+  <div class="badges">
+    <span class="badge">Tablero A <b>· Leyes de UX</b></span>
+    <span class="badge">Tablero B <b>· Heurísticas de Nielsen</b></span>
+    <span class="badge">Sitio estático <b>· sin framework</b></span>
+  </div>
+  <img class="mascota" src="../public/img/logoDigital2.psd.png" alt="">
+</section>
+
+<!-- 2 · OBJETIVOS -->
+<section class="slide">
+  <span class="kicker">01 · Objetivos</span>
+  <h2>Qué objetivos cubre</h2>
+  <div class="obj-list">
+    <div class="obj">
+      <span class="obj__n">1</span>
+      <div>
+        <p class="obj__title">Evaluar un producto real contra principios establecidos</p>
+        <p class="obj__desc">wendys.com.ar, en escritorio y en móvil, contra las 4 leyes de UX y las 10 heurísticas de Nielsen — no una maqueta propia.</p>
+      </div>
+    </div>
+    <div class="obj">
+      <span class="obj__n">2</span>
+      <div>
+        <p class="obj__title">Sostener cada hallazgo con evidencia medible</p>
+        <p class="obj__desc">Nada se puntúa a ojo: cada incumplimiento lleva una comprobación reproducible — la caja de un control, el foco calculado, el árbol de accesibilidad, el texto literal.</p>
+      </div>
+    </div>
+    <div class="obj">
+      <span class="obj__n">3</span>
+      <div>
+        <p class="obj__title">Aplicar los principios evaluados al propio diseño de la app</p>
+        <p class="obj__desc">El flujo de cuatro pasos, el sistema visual y la accesibilidad de la propia herramienta son un caso de estudio de lo que se está enseñando.</p>
+      </div>
+    </div>
+    <div class="obj">
+      <span class="obj__n">4</span>
+      <div>
+        <p class="obj__title">Formar criterio propio antes de ver el veredicto</p>
+        <p class="obj__desc">Un flujo de evaluación a ciegas: el usuario carga sus propios hallazgos y recién después puede contrastarlos con el tablero de referencia.</p>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Tableros de evaluación UX</span><span class="n">2 / 8</span></div>
+</section>
+
+<!-- 3 · FUNCIONALIDAD -->
+<section class="slide">
+  <span class="kicker">02 · Funcionalidad principal</span>
+  <h2>Cómo funciona</h2>
+  <div class="cols">
+    <div class="steps4">
+      <div class="step">
+        <span class="step__n">1</span>
+        <div><p class="step__t">Selección</p><p class="step__d">Elegís qué principios vas a evaluar — todos o un subconjunto — antes de ver ningún hallazgo.</p></div>
+      </div>
+      <div class="step">
+        <span class="step__n">2</span>
+        <div><p class="step__t">Tu evaluación</p><p class="step__d">Cargás cero, uno o varios hallazgos propios por principio, con los mismos ocho campos del tablero final.</p></div>
+      </div>
+      <div class="step">
+        <span class="step__n">3</span>
+        <div><p class="step__t">Confirmación</p><p class="step__d">Revisás el resumen y confirmás con un gesto deliberado: al desplegar el tablero, tu evaluación queda bloqueada.</p></div>
+      </div>
+      <div class="step">
+        <span class="step__n">4</span>
+        <div><p class="step__t">Tablero</p><p class="step__d">Recién acá se pide el JSON de hallazgos: aparece el tablero completo con comparación lado a lado, exportación y reinicio.</p></div>
+      </div>
+    </div>
+    <div style="display:flex; flex-direction:column;">
+      <div class="boardcard a">
+        <div class="boardcard__top"><span class="boardcard__badge">A</span><span class="boardcard__title">Leyes de UX</span></div>
+        <p class="boardcard__desc">Hick, Fitts, Jakob y Miller. 3 hallazgos sobre 4 principios evaluados.</p>
+      </div>
+      <div class="boardcard b">
+        <div class="boardcard__top"><span class="boardcard__badge">B</span><span class="boardcard__title">Heurísticas de Nielsen</span></div>
+        <p class="boardcard__desc">Las diez heurísticas de usabilidad. 9 hallazgos sobre 10 principios, 7 con incumplimientos.</p>
+      </div>
+      <div class="feature-row">
+        <span class="badge">Autoguardado</span>
+        <span class="badge">Export JSON / MD</span>
+        <span class="badge">Comparación lado a lado</span>
+        <span class="badge">100% teclado</span>
+      </div>
+    </div>
+  </div>
+  <div class="foot"><span>Tableros de evaluación UX</span><span class="n">3 / 8</span></div>
+</section>
+
+<!-- 4 · POR QUÉ LAS LEYES -->
+<section class="slide">
+  <span class="kicker">03 · El porqué · Tablero A</span>
+  <h2>Por qué estas leyes</h2>
+  <div class="laws-grid">
+    <div class="law"><span class="law__code">Ley 1 · Hick</span><span class="law__name">Ley de Hick</span><p class="law__desc">El tiempo que lleva decidir crece con la cantidad de opciones que se ofrecen a la vez — por eso cada pantalla tiene una sola acción primaria.</p></div>
+    <div class="law"><span class="law__code">Ley 2 · Fitts</span><span class="law__name">Ley de Fitts</span><p class="law__desc">Un objetivo se alcanza más rápido cuanto más grande es y cuanto menos desplazamiento exige — de ahí el mínimo táctil de 44×44 px.</p></div>
+    <div class="law"><span class="law__code">Ley 3 · Jakob</span><span class="law__name">Ley de Jakob</span><p class="law__desc">El usuario pasa la mayor parte de su tiempo en otros productos y espera que este funcione igual — apartarse del patrón dominante exige una razón escrita.</p></div>
+    <div class="law"><span class="law__code">Ley 4 · Miller</span><span class="law__name">Ley de Miller</span><p class="law__desc">La memoria inmediata retiene alrededor de siete elementos a la vez sin esfuerzo — ningún menú ni grupo sin jerarquía las supera.</p></div>
+  </div>
+  <div class="foot"><span>Tableros de evaluación UX</span><span class="n">4 / 8</span></div>
+</section>
+
+<!-- 5 · POR QUÉ LAS HEURÍSTICAS -->
+<section class="slide">
+  <span class="kicker">03 · El porqué · Tablero B</span>
+  <h2>Por qué estas heurísticas</h2>
+  <div class="heur-grid">
+    <div class="heur"><span class="heur__n">01</span><div><p class="heur__name">Visibilidad del estado</p><p class="heur__desc">El usuario sabe qué está haciendo el sistema y toda acción recibe respuesta.</p></div></div>
+    <div class="heur"><span class="heur__n">02</span><div><p class="heur__name">Mundo real</p><p class="heur__desc">La interfaz habla el idioma del usuario, no la jerga del sistema.</p></div></div>
+    <div class="heur"><span class="heur__n">03</span><div><p class="heur__name">Control y libertad</p><p class="heur__desc">Toda función necesita una salida: deshacer, cancelar, volver.</p></div></div>
+    <div class="heur"><span class="heur__n">04</span><div><p class="heur__name">Consistencia</p><p class="heur__desc">Un mismo concepto se llama y se ve siempre igual.</p></div></div>
+    <div class="heur"><span class="heur__n">05</span><div><p class="heur__name">Prevención de errores</p><p class="heur__desc">El buen diseño hace que el error sea imposible, no solo detectable.</p></div></div>
+    <div class="heur"><span class="heur__n">06</span><div><p class="heur__name">Reconocer, no recordar</p><p class="heur__desc">La interfaz carga con el peso de la memoria, no el usuario.</p></div></div>
+    <div class="heur"><span class="heur__n">07</span><div><p class="heur__name">Flexibilidad</p><p class="heur__desc">Sirve al principiante y al experto: navegación clara y atajos.</p></div></div>
+    <div class="heur"><span class="heur__n">08</span><div><p class="heur__name">Minimalismo</p><p class="heur__desc">La pantalla contiene solo lo esencial para la tarea en curso.</p></div></div>
+    <div class="heur"><span class="heur__n">09</span><div><p class="heur__name">Recuperación de errores</p><p class="heur__desc">El error se explica y ofrece un camino de salida claro.</p></div></div>
+    <div class="heur"><span class="heur__n">10</span><div><p class="heur__name">Ayuda y documentación</p><p class="heur__desc">Encontrable, orientada a la tarea y concisa.</p></div></div>
+  </div>
+  <div class="foot"><span>Tableros de evaluación UX</span><span class="n">5 / 8</span></div>
+</section>
+
+<!-- 6 · METODOLOGÍA -->
+<section class="slide">
+  <span class="kicker">04 · Desarrollo</span>
+  <h2>Cómo se desarrolló</h2>
+  <div class="method-grid">
+    <div class="method-steps">
+      <div class="mstep"><span class="mstep__n"></span><div><p class="mstep__t">Leer las reglas operativas</p><p class="mstep__d">Cada principio se tradujo a reglas binarias, comprobables mirando una pantalla o leyendo el código.</p></div></div>
+      <div class="mstep"><span class="mstep__n"></span><div><p class="mstep__t">Recorrer el producto real</p><p class="mstep__d">En un navegador real, en escritorio y en móvil de 375 px — sin completar compras ni cargar datos personales.</p></div></div>
+      <div class="mstep"><span class="mstep__n"></span><div><p class="mstep__t">Medir, no opinar</p><p class="mstep__d">Por cada regla incumplida: la caja del control, el foco calculado, el árbol de accesibilidad, el texto literal de la interfaz.</p></div></div>
+      <div class="mstep"><span class="mstep__n"></span><div><p class="mstep__t">Puntuar y priorizar</p><p class="mstep__d">Gravedad y facilidad de arreglo de 1 a 5; la prioridad sale del promedio, calculado por la aplicación — nunca a ojo.</p></div></div>
+    </div>
+    <div class="stack-card">
+      <h3>Decisiones de implementación</h3>
+      <ul class="stack-list">
+        <li>Sitio estático: sin framework, sin paso de build, sin CDN.</li>
+        <li>Sistema de diseño con tokens — tema oscuro por defecto, un único acento y un único estilo de foco.</li>
+        <li>Principios que no se pudieron verificar quedan marcados como no evaluados, no rellenados con supuestos.</li>
+        <li>42 pruebas automáticas verifican el flujo completo, el anti-sesgo y el área táctil.</li>
+        <li>Deploy estático en Vercel, sin configuración de build.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot"><span>Tableros de evaluación UX</span><span class="n">6 / 8</span></div>
+</section>
+
+<!-- 7 · RESULTADOS -->
+<section class="slide">
+  <span class="kicker">05 · Resultados</span>
+  <h2>Qué salió</h2>
+  <div class="results-grid">
+    <div class="metric-card">
+      <div class="metric-card__label">Tablero A · Leyes</div>
+      <div class="metric-row"><span class="v">3</span><span class="l">hallazgos, sobre 3 de 4 principios</span></div>
+      <div class="metric-row"><span class="v">1</span><span class="l">principio declarado cumplido — Ley de Hick</span></div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-card__label">Tablero B · Heurísticas</div>
+      <div class="metric-row"><span class="v">9</span><span class="l">hallazgos, sobre 7 de 10 principios</span></div>
+      <div class="metric-row"><span class="v">3</span><span class="l">heurísticas fuera de alcance — exigían pago real</span></div>
+    </div>
+  </div>
+  <div class="top3">
+    <div class="top3-item"><span class="r">01</span><span class="t">El paso de pedido abre con «No hay productos en el menú», sin decir qué hacer</span><span class="s">4,5</span></div>
+    <div class="top3-item"><span class="r">02</span><span class="t">Ningún elemento interactivo del sitio muestra el foco del teclado</span><span class="s">4,5</span></div>
+    <div class="top3-item"><span class="r">03</span><span class="t">La home no tiene ninguna acción primaria: la tarea central no tiene botón</span><span class="s">4,0</span></div>
+  </div>
+  <div class="foot"><span>Tableros de evaluación UX</span><span class="n">7 / 8</span></div>
+</section>
+
+<!-- 8 · CIERRE -->
+<section class="slide closing">
+  <span class="eyebrow">Gracias</span>
+  <h1>Preguntas</h1>
+  <p class="lead">
+    Trabajo práctico de evaluación heurística. El producto evaluado es un sitio
+    público de terceros; este trabajo no tiene vínculo con la marca ni la representa.
+  </p>
+  <div class="links">
+    <div class="link-row"><span class="tag">Repositorio</span><span class="val">github.com/aonate-arg/artefactoUXUI</span></div>
+    <div class="link-row"><span class="tag">Producto</span><span class="val">wendys.com.ar</span></div>
+    <div class="link-row"><span class="tag">Materia</span><span>Diseño UX/UI</span></div>
+  </div>
+  <div class="foot"><span>Tableros de evaluación UX</span><span class="n">8 / 8</span></div>
+</section>
+
+</body>
+</html>
