@@ -86,6 +86,9 @@
       t.hal = g.hal && typeof g.hal === 'object' ? g.hal : {};
       t.sin = g.sin && typeof g.sin === 'object' ? g.sin : {};
       t.draft = g.draft && typeof g.draft === 'object' ? g.draft : {};
+      /* También se recuerda en qué principio estaba: volver y aparecer en el
+         primero de la lista es perder parte de «todo como lo dejó». */
+      if (g.foco && t.sel.indexOf(g.foco) !== -1) t.foco = g.foco;
       t.confirmado = !!g.confirmado;
       t.fecha = g.fecha || null;
       /* Al volver a entrar, el tablero solo es la vista por defecto. */
